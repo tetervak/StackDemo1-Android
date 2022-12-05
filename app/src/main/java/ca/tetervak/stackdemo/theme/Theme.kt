@@ -1,4 +1,4 @@
-package ca.tetervak.stackdemo.ui.theme
+package ca.tetervak.stackdemo.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
