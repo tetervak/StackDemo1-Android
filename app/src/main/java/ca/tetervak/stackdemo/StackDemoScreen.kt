@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -82,13 +83,16 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
 @Composable
 fun StackContent(itemList: List<StackItem>, modifier: Modifier) {
     LazyColumn(modifier = modifier) {
-        items(itemList) { stackItem ->
+        itemsIndexed(itemList) { index, stackItem ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .border(width = 1.dp, color = Color.Gray)
+                    .padding(
+                        top = if (index == 0) 16.dp else 0.dp,
+                        bottom = 16.dp
+                    )
+                    .border(width = 2.dp, color = Color.Gray)
                     .padding(all = 16.dp)
 
             ) {
