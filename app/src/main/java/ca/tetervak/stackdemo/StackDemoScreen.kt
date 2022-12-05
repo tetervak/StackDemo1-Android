@@ -1,8 +1,9 @@
 package ca.tetervak.stackdemo
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun StackDemoScreen() {
-    TODO("Not yet implemented")
+fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
+
 }
