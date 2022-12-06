@@ -3,7 +3,6 @@ package ca.tetervak.stackdemo
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +41,7 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
         Text(
             text = "Stack Demo",
             fontSize = 48.sp,
+            color = colorResource(id = R.color.pink_700)
         )
         StackValueInputOutput(
             value = input,
@@ -51,13 +52,16 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
         )
         ButtonRow(
             onPush = {
-                viewModel.push(input)
-                input = ""
+                if(input.isNotBlank()){
+                    viewModel.push(value = input.trim())
+                    input = ""
+                }
             },
             onPop = {
                 input = itemList[0].value
                 viewModel.pop()
             },
+            showPopButton = itemList.isNotEmpty(),
             modifier = Modifier
                 .width(width = 256.dp)
                 .padding(top = 24.dp)
@@ -67,12 +71,32 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
             thickness = 2.dp,
             modifier = Modifier.padding(top = 24.dp)
         )
-        StackContent(
-            itemList = itemList,
-            modifier = Modifier
-                .width(width = 256.dp)
-                .weight(1f)
-        )
+        if(itemList.isNotEmpty()){
+            StackContent(
+                itemList = itemList,
+                modifier = Modifier
+                    .width(width = 256.dp)
+                    .weight(1f)
+            )
+        } else {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                Text(
+                    text="The Stack is Empty",
+                    fontSize = 32.sp,
+                    color = colorResource(id = R.color.orange_900),
+                    modifier = Modifier.border(
+                        width = 2.dp,
+                        color = colorResource(id = R.color.orange_900)
+                    ).padding(all = 16.dp)
+                )
+            }
+        }
         Divider(
             color = Color.Gray,
             thickness = 2.dp
@@ -103,7 +127,7 @@ fun StackContent(itemList: List<StackItem>, modifier: Modifier) {
                 Text(
                     text = stackItem.value,
                     fontSize = 32.sp,
-                    color = Color.Blue
+                    color = colorResource(id = R.color.blue_900)
                 )
             }
         }
@@ -114,6 +138,7 @@ fun StackContent(itemList: List<StackItem>, modifier: Modifier) {
 fun ButtonRow(
     onPush: () -> Unit,
     onPop: () -> Unit,
+    showPopButton: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -127,12 +152,14 @@ fun ButtonRow(
             )
             Text(text = "Push")
         }
-        Button(onClick = onPop) {
-            Icon(
-                imageVector = Icons.Filled.ArrowUpward,
-                contentDescription = null
-            )
-            Text(text = "Pop")
+        if(showPopButton) {
+            Button(onClick = onPop) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowUpward,
+                    contentDescription = null
+                )
+                Text(text = "Pop")
+            }
         }
     }
 }
@@ -155,7 +182,10 @@ fun StackValueInputOutput(
             onDone = { focusManager.clearFocus() }
         ),
         singleLine = true,
-        textStyle = TextStyle.Default.copy(fontSize = 32.sp, color = Color.Blue),
+        textStyle = TextStyle.Default.copy(
+            fontSize = 32.sp,
+            color = colorResource(id = R.color.blue_900)
+        ),
         modifier = modifier
     )
 }

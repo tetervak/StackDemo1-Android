@@ -1,26 +1,31 @@
 package ca.tetervak.stackdemo
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import ca.tetervak.stackdemo.data.repository.StackItemRepository
 import ca.tetervak.stackdemo.model.StackItem
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel: ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val stackItemRepository: StackItemRepository
+): ViewModel() {
 
-    val stackItemsFlow = flow {
-        val list = buildList<StackItem> {
-            for (i in 5 downTo 1){
-                add(StackItem(i, "item $i"))
-            }
-        }
-        emit(list)
-    }
+    val stackItemsFlow = stackItemRepository.getAllStackItemsFlow()
 
     fun pop(){
-
+        viewModelScope.launch(Dispatchers.IO){
+            stackItemRepository.deleteLastStackItem()
+        }
     }
 
     fun push(value: String){
-
+        viewModelScope.launch(Dispatchers.IO){
+            stackItemRepository.insert(stackItemValue = value)
+        }
     }
-
 }
