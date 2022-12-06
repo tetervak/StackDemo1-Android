@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +40,7 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
             .padding(all = 32.dp)
     ) {
         Text(
-            text = "Stack Demo",
+            text = stringResource(R.string.stack_demo_title),
             fontSize = 48.sp,
             color = colorResource(id = R.color.pink_700)
         )
@@ -150,7 +151,7 @@ fun ButtonRow(
                 imageVector = Icons.Default.ArrowDownward,
                 contentDescription = null
             )
-            Text(text = "Push")
+            Text(text = stringResource(R.string.push_button_label))
         }
         if(showPopButton) {
             Button(onClick = onPop) {
@@ -158,7 +159,7 @@ fun ButtonRow(
                     imageVector = Icons.Filled.ArrowUpward,
                     contentDescription = null
                 )
-                Text(text = "Pop")
+                Text(text = stringResource(R.string.pop_button_label))
             }
         }
     }
@@ -172,7 +173,7 @@ fun StackValueInputOutput(
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
-        label = { Text(text = "Input / Output") },
+        label = { Text(text = stringResource(R.string.input_output_label)) },
         value = value,
         onValueChange = onChange,
         keyboardOptions = KeyboardOptions(

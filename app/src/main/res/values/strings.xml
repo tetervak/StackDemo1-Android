@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StackDemo-Android</string>
+    <string name="stack_demo_title">Stack Demo</string>
+    <string name="push_button_label">Push</string>
+    <string name="pop_button_label">Pop</string>
+    <string name="input_output_label">Input / Output</string>
 </resources>
