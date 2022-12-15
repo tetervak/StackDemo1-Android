@@ -3,10 +3,8 @@ package ca.tetervak.stackdemo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ca.tetervak.stackdemo.data.repository.StackItemRepository
-import ca.tetervak.stackdemo.model.StackItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
