@@ -4,4 +4,5 @@
     <string name="push_button_label">Push</string>
     <string name="pop_button_label">Pop</string>
     <string name="input_output_label">Input / Output</string>
+    <string name="stack_empty_message">The Stack is Empty</string>
 </resources>

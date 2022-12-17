@@ -88,7 +88,7 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
                     .weight(1f)
             ) {
                 Text(
-                    text="The Stack is Empty",
+                    text= stringResource(R.string.stack_empty_message),
                     fontSize = 32.sp,
                     color = colorResource(id = R.color.orange_900),
                     modifier = Modifier.border(
