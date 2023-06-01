@@ -10,6 +10,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -179,9 +184,9 @@ fun StackValueInputOutput(
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done
         ),
-        keyboardActions = KeyboardActions(
-            onDone = { focusManager.clearFocus() }
-        ),
+//        keyboardActions = KeyboardActions(
+//            onDone = { focusManager.clearFocus() }
+//        ),
         singleLine = true,
         textStyle = TextStyle.Default.copy(
             fontSize = 32.sp,
