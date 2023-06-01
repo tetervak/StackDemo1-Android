@@ -179,7 +179,6 @@ fun StackValueInputOutput(
     onChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-//    val focusManager = LocalFocusManager.current
     TextField(
         label = { Text(text = stringResource(R.string.input_output_label)) },
         value = value,
@@ -187,9 +186,6 @@ fun StackValueInputOutput(
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done
         ),
-//        keyboardActions = KeyboardActions(
-//            onDone = { focusManager.clearFocus() }
-//        ),
         singleLine = true,
         textStyle = TextStyle.Default.copy(
             fontSize = 32.sp,
