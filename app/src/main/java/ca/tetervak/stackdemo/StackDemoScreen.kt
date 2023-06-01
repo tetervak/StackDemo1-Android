@@ -4,9 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
@@ -38,6 +36,8 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
     var input: String by rememberSaveable { mutableStateOf("") }
     val itemList: List<StackItem> by viewModel.stackItemsFlow.collectAsState(initial = emptyList())
 
+    val focusManager = LocalFocusManager.current
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -61,6 +61,7 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
                 if(input.isNotBlank()){
                     viewModel.push(value = input.trim())
                     input = ""
+                    focusManager.clearFocus()
                 }
             },
             onPop = {
@@ -96,10 +97,12 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
                     text= stringResource(R.string.stack_empty_message),
                     fontSize = 32.sp,
                     color = colorResource(id = R.color.orange_900),
-                    modifier = Modifier.border(
-                        width = 2.dp,
-                        color = colorResource(id = R.color.orange_900)
-                    ).padding(all = 16.dp)
+                    modifier = Modifier
+                        .border(
+                            width = 2.dp,
+                            color = colorResource(id = R.color.orange_900)
+                        )
+                        .padding(all = 16.dp)
                 )
             }
         }
@@ -176,7 +179,7 @@ fun StackValueInputOutput(
     onChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val focusManager = LocalFocusManager.current
+//    val focusManager = LocalFocusManager.current
     TextField(
         label = { Text(text = stringResource(R.string.input_output_label)) },
         value = value,
