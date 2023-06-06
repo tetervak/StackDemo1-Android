@@ -1,29 +1,29 @@
 package ca.tetervak.stackdemo
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import ca.tetervak.stackdemo.data.repository.StackItemRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import ca.tetervak.stackdemo.model.StackItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    private val stackItemRepository: StackItemRepository
-): ViewModel() {
+class MainViewModel: ViewModel() {
 
-    val stackItemsFlow = stackItemRepository.getAllStackItemsFlow()
+    private val _uiStateFlow: MutableStateFlow<List<StackItem>> =
+        MutableStateFlow(emptyList())
+    val uiStateFlow: StateFlow<List<StackItem>> =_uiStateFlow
 
     fun pop(){
-        viewModelScope.launch(Dispatchers.IO){
-            stackItemRepository.deleteLastStackItem()
+        _uiStateFlow.update { list ->
+            list.drop(1)
         }
     }
 
     fun push(value: String){
-        viewModelScope.launch(Dispatchers.IO){
-            stackItemRepository.insert(stackItemValue = value)
+        _uiStateFlow.update { list ->
+            val newItem = StackItem(list.size + 1 , value)
+            val newList = list.toMutableList()
+            newList.add(0, newItem)
+            newList
         }
     }
 }

@@ -34,7 +34,7 @@ import ca.tetervak.stackdemo.model.StackItem
 fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
 
     var input: String by rememberSaveable { mutableStateOf("") }
-    val itemList: List<StackItem> by viewModel.stackItemsFlow.collectAsState(initial = emptyList())
+    val itemList: List<StackItem> by viewModel.uiStateFlow.collectAsState()
 
     val focusManager = LocalFocusManager.current
 
