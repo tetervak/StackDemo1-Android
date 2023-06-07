@@ -115,16 +115,19 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
 
 @Composable
 fun StackContent(itemList: List<StackItem>, modifier: Modifier) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        contentPadding = PaddingValues(
+            vertical = 8.dp,
+            horizontal = 8.dp
+        ),
+        modifier = modifier
+    ) {
         itemsIndexed(itemList) { index, stackItem ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        top = if (index == 0) 16.dp else 0.dp,
-                        bottom = 16.dp
-                    )
+                    .padding(all = 8.dp)
                     .border(width = 2.dp, color = Color.Gray)
                     .padding(all = 16.dp)
 
