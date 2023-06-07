@@ -3,7 +3,7 @@ package ca.tetervak.stackdemo
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
@@ -122,7 +122,7 @@ fun StackContent(itemList: List<StackItem>, modifier: Modifier) {
         ),
         modifier = modifier
     ) {
-        itemsIndexed(itemList) { index, stackItem ->
+        items(itemList) { stackItem ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
