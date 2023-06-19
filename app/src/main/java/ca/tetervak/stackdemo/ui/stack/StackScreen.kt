@@ -1,4 +1,4 @@
-package ca.tetervak.stackdemo
+package ca.tetervak.stackdemo.ui.stack
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -11,6 +11,8 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
@@ -27,14 +29,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ca.tetervak.stackdemo.model.StackItem
+import ca.tetervak.stackdemo.R
+import ca.tetervak.stackdemo.domain.StackItem
+import ca.tetervak.stackdemo.ui.theme.AppTheme
 
-@Preview
+
 @Composable
-fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
+fun StackScreen(viewModel: StackViewModel) {
 
     var input: String by rememberSaveable { mutableStateOf("") }
-    val itemList: List<StackItem> by viewModel.uiStateFlow.collectAsState()
+    val state: State<StackUiState> = viewModel.stackUiState.collectAsState()
+    val items: List<StackItem> = state.value.items
 
     val focusManager = LocalFocusManager.current
 
@@ -65,10 +70,9 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
                 }
             },
             onPop = {
-                input = itemList[0].value
-                viewModel.pop()
+                input = viewModel.pop()
             },
-            showPopButton = itemList.isNotEmpty(),
+            showPopButton = items.isNotEmpty(),
             modifier = Modifier
                 .width(width = 256.dp)
                 .padding(top = 24.dp)
@@ -78,9 +82,9 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
             thickness = 2.dp,
             modifier = Modifier.padding(top = 24.dp)
         )
-        if(itemList.isNotEmpty()){
+        if(items.isNotEmpty()){
             StackContent(
-                itemList = itemList,
+                itemList = items,
                 modifier = Modifier
                     .width(width = 256.dp)
                     .weight(1f)
@@ -110,6 +114,24 @@ fun StackDemoScreen(viewModel: MainViewModel = viewModel()) {
             color = Color.Gray,
             thickness = 2.dp
         )
+    }
+}
+
+@Preview
+@Composable
+fun StackScreenPreview(){
+    AppTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            val viewModel: StackViewModel = viewModel()
+            viewModel.push("Item A")
+            viewModel.push("Item B")
+            viewModel.push("Item C")
+            StackScreen(viewModel = viewModel)
+        }
     }
 }
 

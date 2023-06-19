@@ -1,4 +1,4 @@
-package ca.tetervak.stackdemo.model
+package ca.tetervak.stackdemo.domain
 
 data class StackItem(
     val count: Int,

@@ -1,4 +1,4 @@
-package ca.tetervak.stackdemo.theme
+package ca.tetervak.stackdemo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
