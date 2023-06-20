@@ -1,7 +1,7 @@
 package ca.tetervak.stackdemo.ui.stack
 
 import androidx.lifecycle.ViewModel
-import ca.tetervak.stackdemo.domain.StackDemo
+import ca.tetervak.stackdemo.data.StackDemo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -23,8 +23,8 @@ class StackViewModel: ViewModel() {
     }
 
     fun push(value: String){
+        stack.push(value)
         _stackUiState.update {
-            stack.push(value)
             StackUiState(items = stack.items)
         }
     }

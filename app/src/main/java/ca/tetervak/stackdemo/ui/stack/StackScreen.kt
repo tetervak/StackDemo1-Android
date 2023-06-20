@@ -35,8 +35,10 @@ import ca.tetervak.stackdemo.ui.theme.AppTheme
 
 
 @Composable
-fun StackScreen(viewModel: StackViewModel) {
-
+fun StackScreen(
+    viewModel: StackViewModel,
+    modifier: Modifier = Modifier
+) {
     var input: String by rememberSaveable { mutableStateOf("") }
     val state: State<StackUiState> = viewModel.stackUiState.collectAsState()
     val items: List<StackItem> = state.value.items
@@ -45,7 +47,7 @@ fun StackScreen(viewModel: StackViewModel) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(all = 32.dp)
     ) {
@@ -86,7 +88,7 @@ fun StackScreen(viewModel: StackViewModel) {
             StackContent(
                 itemList = items,
                 modifier = Modifier
-                    .width(width = 256.dp)
+                    .fillMaxWidth()
                     .weight(1f)
             )
         } else {
@@ -136,20 +138,24 @@ fun StackScreenPreview(){
 }
 
 @Composable
-fun StackContent(itemList: List<StackItem>, modifier: Modifier) {
+fun StackContent(
+    itemList: List<StackItem>,
+    modifier: Modifier
+) {
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
             horizontal = 8.dp
         ),
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
         items(itemList) { stackItem ->
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp)
+                    .padding(vertical = 8.dp)
+                    .width(width = 256.dp)
                     .border(width = 2.dp, color = Color.Gray)
                     .padding(all = 16.dp)
 
@@ -184,7 +190,10 @@ fun ButtonRow(
                 imageVector = Icons.Default.ArrowDownward,
                 contentDescription = null
             )
-            Text(text = stringResource(R.string.push_button_label))
+            Text(
+                text = stringResource(R.string.push_button_label),
+                fontSize = 20.sp
+            )
         }
         if(showPopButton) {
             Button(onClick = onPop) {
@@ -192,7 +201,9 @@ fun ButtonRow(
                     imageVector = Icons.Filled.ArrowUpward,
                     contentDescription = null
                 )
-                Text(text = stringResource(R.string.pop_button_label))
+                Text(text = stringResource(R.string.pop_button_label),
+                    fontSize = 20.sp
+                )
             }
         }
     }
@@ -216,6 +227,6 @@ fun StackValueInputOutput(
             fontSize = 32.sp,
             color = colorResource(id = R.color.blue_900)
         ),
-        modifier = modifier
+        modifier = modifier.border(width = 2.dp, color = Color.Gray)
     )
 }

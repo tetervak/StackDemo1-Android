@@ -1,4 +1,6 @@
-package ca.tetervak.stackdemo.domain
+package ca.tetervak.stackdemo.data
+
+import ca.tetervak.stackdemo.domain.StackItem
 
 class StackDemo {
 
