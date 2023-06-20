@@ -15,13 +15,17 @@ class DefaultStackDataSource {
     fun getItemsFlow(): Flow<List<String>> = itemsFlow
 
     suspend fun push(value: String): Unit = coroutineScope {
-        list.add(value)
-        itemsFlow.tryEmit(list.toList()) // emit the copy of the list
+        synchronized(list){
+            list.add(value)
+            itemsFlow.tryEmit(list.toList())
+        }
     }
 
     suspend fun pop(): String = coroutineScope {
-        val removed = list.removeLast()
-        itemsFlow.tryEmit(list.toList()) // emit the copy of the list
-        removed
+         synchronized(list){
+             val removed = list.removeLast()
+             itemsFlow.tryEmit(list.toList())
+             removed
+        }
     }
 }
