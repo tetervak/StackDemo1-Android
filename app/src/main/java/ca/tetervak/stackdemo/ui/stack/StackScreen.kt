@@ -16,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +38,7 @@ fun StackScreen(
     viewModel: StackViewModel,
     modifier: Modifier = Modifier
 ) {
-    var input: String by rememberSaveable { mutableStateOf("") }
+    val input: String by viewModel.inputUiState
     val state: State<StackUiState> = viewModel.stackUiState.collectAsState()
     val items: List<StackItem> = state.value.items
 
@@ -58,7 +57,7 @@ fun StackScreen(
         )
         StackValueInputOutput(
             value = input,
-            onChange = { input = it },
+            onChange = { viewModel.setInput(it) },
             modifier = Modifier
                 .sizeIn(minWidth = 256.dp)
                 .padding(top = 24.dp)
@@ -66,13 +65,13 @@ fun StackScreen(
         ButtonRow(
             onPush = {
                 if(input.isNotBlank()){
-                    viewModel.push(value = input.trim())
-                    input = ""
+                    viewModel.push()
+                    viewModel.setInput("")
                     focusManager.clearFocus()
                 }
             },
             onPop = {
-                input = viewModel.pop()
+                viewModel.pop()
             },
             showPopButton = items.isNotEmpty(),
             modifier = Modifier
@@ -129,9 +128,9 @@ fun StackScreenPreview(){
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: StackViewModel = viewModel()
-            viewModel.push("Item A")
-            viewModel.push("Item B")
-            viewModel.push("Item C")
+//            viewModel.pushInput("Item A")
+//            viewModel.pushInput("Item B")
+//            viewModel.pushInput("Item C")
             StackScreen(viewModel = viewModel)
         }
     }
