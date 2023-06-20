@@ -1,8 +1,5 @@
 package ca.tetervak.stackdemo.ui.stack
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ca.tetervak.stackdemo.data.repository.DefaultStackItemRepository
@@ -15,18 +12,10 @@ import kotlinx.coroutines.launch
 
 class StackViewModel(
     private val repository: StackItemRepository = DefaultStackItemRepository()
-): ViewModel() {
-
-    private val _inputUiState: MutableState<String> = mutableStateOf("")
-    val inputUiState: State<String> = _inputUiState
-
-    fun setInput(value: String) {
-        _inputUiState.value = value
-    }
+) : ViewModel() {
 
     val stackUiState: StateFlow<StackUiState> =
-        repository.getStackItems().map { StackUiState(items = it) }
-            .stateIn(
+        repository.getStackItems().map { StackUiState(items = it) }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = StackUiState()
@@ -37,11 +26,10 @@ class StackViewModel(
     }
 
     fun pop() = viewModelScope.launch {
-            val removed = repository.pop()
-            _inputUiState.value = removed
-        }
+        repository.pop()
+    }
 
-    fun push() = viewModelScope.launch {
-        repository.push(inputUiState.value)
+    fun push(value: String) = viewModelScope.launch {
+        repository.push(value)
     }
 }

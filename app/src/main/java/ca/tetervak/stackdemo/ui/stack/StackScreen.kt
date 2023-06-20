@@ -16,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +28,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ca.tetervak.stackdemo.R
 import ca.tetervak.stackdemo.domain.StackItem
 import ca.tetervak.stackdemo.ui.theme.AppTheme
@@ -38,7 +38,7 @@ fun StackScreen(
     viewModel: StackViewModel,
     modifier: Modifier = Modifier
 ) {
-    val input: String by viewModel.inputUiState
+    var input: String by rememberSaveable { mutableStateOf("") }
     val state: State<StackUiState> = viewModel.stackUiState.collectAsState()
     val items: List<StackItem> = state.value.items
 
@@ -57,7 +57,7 @@ fun StackScreen(
         )
         StackValueInputOutput(
             value = input,
-            onChange = { viewModel.setInput(it) },
+            onChange = { input = it },
             modifier = Modifier
                 .sizeIn(minWidth = 256.dp)
                 .padding(top = 24.dp)
@@ -65,12 +65,13 @@ fun StackScreen(
         ButtonRow(
             onPush = {
                 if(input.isNotBlank()){
-                    viewModel.push()
-                    viewModel.setInput("")
+                    viewModel.push(input.trim())
+                    input = ""
                     focusManager.clearFocus()
                 }
             },
             onPop = {
+                input = items.first().value
                 viewModel.pop()
             },
             showPopButton = items.isNotEmpty(),
@@ -127,10 +128,10 @@ fun StackScreenPreview(){
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            val viewModel: StackViewModel = viewModel()
-//            viewModel.pushInput("Item A")
-//            viewModel.pushInput("Item B")
-//            viewModel.pushInput("Item C")
+            val viewModel = StackViewModel()
+            viewModel.push("Item A")
+            viewModel.push("Item B")
+            viewModel.push("Item C")
             StackScreen(viewModel = viewModel)
         }
     }
