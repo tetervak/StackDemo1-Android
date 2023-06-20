@@ -72,7 +72,8 @@ fun StackScreen(
                 }
             },
             onPop = {
-                input = viewModel.pop()
+                input = items.first().value
+                viewModel.pop()
             },
             showPopButton = items.isNotEmpty(),
             modifier = Modifier

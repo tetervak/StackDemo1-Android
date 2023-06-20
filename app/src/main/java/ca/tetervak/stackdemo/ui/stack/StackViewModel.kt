@@ -14,12 +14,10 @@ class StackViewModel: ViewModel() {
 
     private val stack = StackDemo()
 
-    fun pop(): String {
-        val removed = stack.pop()
+    fun pop() {
         _stackUiState.update {
             StackUiState(items = stack.items)
         }
-        return removed
     }
 
     fun push(value: String){
