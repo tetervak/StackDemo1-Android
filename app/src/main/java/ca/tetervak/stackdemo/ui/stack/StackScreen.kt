@@ -29,20 +29,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ca.tetervak.stackdemo.R
-import ca.tetervak.stackdemo.data.repository.DefaultStackItemRepository
-import ca.tetervak.stackdemo.data.source.DefaultStackDataSource
 import ca.tetervak.stackdemo.domain.StackItem
 import ca.tetervak.stackdemo.ui.theme.AppTheme
 
 
 @Composable
 fun StackScreen(
-    viewModel: StackViewModel,
+    viewModel: StackViewModel, modifier: Modifier = Modifier
+) {
+    val state: State<StackUiState> = viewModel.stackUiState.collectAsState()
+    val itemList: List<StackItem> = state.value.items
+
+    StackScreenBody(onPush = { viewModel.push(it) },
+        onPop = { viewModel.pop() },
+        itemList = itemList,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun StackScreenBody(
+    onPush: (String) -> Unit,
+    onPop: () -> Unit,
+    itemList: List<StackItem>,
     modifier: Modifier = Modifier
 ) {
     var input: String by rememberSaveable { mutableStateOf("") }
-    val state: State<StackUiState> = viewModel.stackUiState.collectAsState()
-    val items: List<StackItem> = state.value.items
 
     val focusManager = LocalFocusManager.current
 
@@ -64,32 +76,28 @@ fun StackScreen(
                 .sizeIn(minWidth = 256.dp)
                 .padding(top = 24.dp)
         )
-        ButtonRow(
-            onPush = {
-                if(input.isNotBlank()){
-                    viewModel.push(input.trim())
-                    input = ""
-                    focusManager.clearFocus()
-                }
-            },
+        ButtonRow(onPush = {
+            if (input.isNotBlank()) {
+                onPush(input.trim())
+                input = ""
+                focusManager.clearFocus()
+            }
+        },
             onPop = {
-                input = items.first().value
-                viewModel.pop()
+                input = itemList.first().value
+                onPop()
             },
-            showPopButton = items.isNotEmpty(),
+            showPopButton = itemList.isNotEmpty(),
             modifier = Modifier
                 .width(width = 256.dp)
                 .padding(top = 24.dp)
         )
         Divider(
-            color = Color.Gray,
-            thickness = 2.dp,
-            modifier = Modifier.padding(top = 24.dp)
+            color = Color.Gray, thickness = 2.dp, modifier = Modifier.padding(top = 24.dp)
         )
-        if(items.isNotEmpty()){
+        if (itemList.isNotEmpty()) {
             StackContent(
-                itemList = items,
-                modifier = Modifier
+                itemList = itemList, modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
             )
@@ -100,60 +108,49 @@ fun StackScreen(
                     .weight(1f)
             ) {
                 Text(
-                    text= stringResource(R.string.stack_empty_message),
+                    text = stringResource(R.string.stack_empty_message),
                     fontSize = 32.sp,
                     color = colorResource(id = R.color.orange_900),
                     modifier = Modifier
                         .align(alignment = Alignment.Center)
                         .border(
-                            width = 2.dp,
-                            color = colorResource(id = R.color.orange_900)
+                            width = 2.dp, color = colorResource(id = R.color.orange_900)
                         )
                         .padding(all = 16.dp)
                 )
             }
         }
         Divider(
-            color = Color.Gray,
-            thickness = 2.dp
+            color = Color.Gray, thickness = 2.dp
         )
     }
 }
 
 @Preview
 @Composable
-fun StackScreenPreview(){
+fun StackScreenBodyPreview() {
     AppTheme {
         // A surface container using the 'background' color from the theme
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            val viewModel = StackViewModel(
-                DefaultStackItemRepository(
-                    DefaultStackDataSource()
-                )
+            val itemList = listOf(
+                StackItem(3, "Item C"), StackItem(2, "Item B"), StackItem(1, "Item A")
             )
-            viewModel.push("Item A")
-            viewModel.push("Item B")
-            viewModel.push("Item C")
-            StackScreen(viewModel = viewModel)
+            StackScreenBody(onPush = {}, onPop = {}, itemList = itemList
+            )
         }
     }
 }
 
 @Composable
 fun StackContent(
-    itemList: List<StackItem>,
-    modifier: Modifier
+    itemList: List<StackItem>, modifier: Modifier
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
-            vertical = 8.dp,
-            horizontal = 8.dp
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+            vertical = 8.dp, horizontal = 8.dp
+        ), horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
     ) {
         items(itemList) { stackItem ->
             Row(
@@ -166,8 +163,7 @@ fun StackContent(
 
             ) {
                 Text(
-                    text = "${stackItem.count}.",
-                    fontSize = 32.sp
+                    text = "${stackItem.count}.", fontSize = 32.sp
                 )
                 Text(
                     text = stackItem.value,
@@ -181,33 +177,26 @@ fun StackContent(
 
 @Composable
 fun ButtonRow(
-    onPush: () -> Unit,
-    onPop: () -> Unit,
-    showPopButton: Boolean,
-    modifier: Modifier = Modifier
+    onPush: () -> Unit, onPop: () -> Unit, showPopButton: Boolean, modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
+        horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier
     ) {
         Button(onClick = onPush) {
             Icon(
-                imageVector = Icons.Default.ArrowDownward,
-                contentDescription = null
+                imageVector = Icons.Default.ArrowDownward, contentDescription = null
             )
             Text(
-                text = stringResource(R.string.push_button_label),
-                fontSize = 20.sp
+                text = stringResource(R.string.push_button_label), fontSize = 20.sp
             )
         }
-        if(showPopButton) {
+        if (showPopButton) {
             Button(onClick = onPop) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowUpward,
-                    contentDescription = null
+                    imageVector = Icons.Filled.ArrowUpward, contentDescription = null
                 )
-                Text(text = stringResource(R.string.pop_button_label),
-                    fontSize = 20.sp
+                Text(
+                    text = stringResource(R.string.pop_button_label), fontSize = 20.sp
                 )
             }
         }
@@ -216,9 +205,7 @@ fun ButtonRow(
 
 @Composable
 fun StackValueInputOutput(
-    value: String,
-    onChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier
 ) {
     TextField(
         label = { Text(text = stringResource(R.string.input_output_label)) },
@@ -229,8 +216,7 @@ fun StackValueInputOutput(
         ),
         singleLine = true,
         textStyle = TextStyle.Default.copy(
-            fontSize = 32.sp,
-            color = colorResource(id = R.color.blue_900)
+            fontSize = 32.sp, color = colorResource(id = R.color.blue_900)
         ),
         modifier = modifier.border(width = 2.dp, color = Color.Gray)
     )
