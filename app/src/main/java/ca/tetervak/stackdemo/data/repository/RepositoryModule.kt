@@ -11,6 +11,6 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindStackItemRepository(
-        repository: DefaultStackItemRepository
+        repository: LocalStackItemRepository
     ): StackItemRepository
 }
