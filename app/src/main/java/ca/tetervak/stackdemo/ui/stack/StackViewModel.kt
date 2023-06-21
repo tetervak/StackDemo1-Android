@@ -2,16 +2,18 @@ package ca.tetervak.stackdemo.ui.stack
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ca.tetervak.stackdemo.data.repository.DefaultStackItemRepository
 import ca.tetervak.stackdemo.data.repository.StackItemRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StackViewModel(
-    private val repository: StackItemRepository = DefaultStackItemRepository()
+@HiltViewModel
+class StackViewModel @Inject constructor(
+    private val repository: StackItemRepository
 ) : ViewModel() {
 
     val stackUiState: StateFlow<StackUiState> =

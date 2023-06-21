@@ -7,9 +7,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultStackItemRepository(
-    private val source: DefaultStackDataSource = DefaultStackDataSource()
+@Singleton
+class DefaultStackItemRepository @Inject constructor(
+    private val source: DefaultStackDataSource
 ) : StackItemRepository {
 
     // the first item of the list is the top of the stack

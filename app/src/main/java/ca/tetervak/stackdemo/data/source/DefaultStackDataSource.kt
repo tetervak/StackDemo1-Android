@@ -3,8 +3,11 @@ package ca.tetervak.stackdemo.data.source
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultStackDataSource {
+@Singleton
+class DefaultStackDataSource @Inject constructor(){
 
     // the first item of the list is the bottom of the stack
     private val list: MutableList<String> = mutableListOf()

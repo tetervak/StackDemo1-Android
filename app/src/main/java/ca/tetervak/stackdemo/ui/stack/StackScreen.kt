@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ca.tetervak.stackdemo.R
+import ca.tetervak.stackdemo.data.repository.DefaultStackItemRepository
+import ca.tetervak.stackdemo.data.source.DefaultStackDataSource
 import ca.tetervak.stackdemo.domain.StackItem
 import ca.tetervak.stackdemo.ui.theme.AppTheme
 
@@ -127,7 +129,11 @@ fun StackScreenPreview(){
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            val viewModel = StackViewModel()
+            val viewModel = StackViewModel(
+                DefaultStackItemRepository(
+                    DefaultStackDataSource()
+                )
+            )
             viewModel.push("Item A")
             viewModel.push("Item B")
             viewModel.push("Item C")
