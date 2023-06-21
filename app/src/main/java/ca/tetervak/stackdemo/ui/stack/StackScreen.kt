@@ -92,9 +92,7 @@ fun StackScreen(
                     .weight(1f)
             )
         } else {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
@@ -104,6 +102,7 @@ fun StackScreen(
                     fontSize = 32.sp,
                     color = colorResource(id = R.color.orange_900),
                     modifier = Modifier
+                        .align(alignment = Alignment.Center)
                         .border(
                             width = 2.dp,
                             color = colorResource(id = R.color.orange_900)
