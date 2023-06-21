@@ -1,5 +1,6 @@
 package ca.tetervak.stackdemo.ui.stack
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -76,7 +78,7 @@ fun StackScreenBody(
                 .sizeIn(minWidth = 256.dp)
                 .padding(top = 24.dp)
         )
-        ButtonRow(onPush = {
+        StackButtonRow(onPush = {
             if (input.isNotBlank()) {
                 onPush(input.trim())
                 input = ""
@@ -176,30 +178,41 @@ fun StackContent(
 }
 
 @Composable
-fun ButtonRow(
+fun StackButtonRow(
     onPush: () -> Unit, onPop: () -> Unit, showPopButton: Boolean, modifier: Modifier = Modifier
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier
     ) {
-        Button(onClick = onPush) {
-            Icon(
-                imageVector = Icons.Default.ArrowDownward, contentDescription = null
-            )
-            Text(
-                text = stringResource(R.string.push_button_label), fontSize = 20.sp
-            )
-        }
+        StackButton(
+            onClick = onPush,
+            imageVector = Icons.Default.ArrowDownward,
+            stringRes = R.string.push_button_label
+        )
         if (showPopButton) {
-            Button(onClick = onPop) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowUpward, contentDescription = null
-                )
-                Text(
-                    text = stringResource(R.string.pop_button_label), fontSize = 20.sp
-                )
-            }
+            StackButton(
+                onClick = onPop,
+                imageVector = Icons.Default.ArrowUpward,
+                stringRes = R.string.pop_button_label
+            )
         }
+    }
+}
+
+@Composable
+fun StackButton(
+    onClick: () -> Unit,
+    imageVector: ImageVector,
+    @StringRes stringRes: Int,
+    modifier: Modifier = Modifier
+) {
+    Button(onClick = onClick, modifier = modifier) {
+        Icon(
+            imageVector = imageVector, contentDescription = null
+        )
+        Text(
+            text = stringResource(stringRes), fontSize = 20.sp
+        )
     }
 }
 
