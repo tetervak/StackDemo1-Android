@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -210,6 +211,7 @@ fun StackButton(
         Icon(
             imageVector = imageVector, contentDescription = null
         )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text(
             text = stringResource(stringRes), fontSize = 20.sp
         )
